@@ -24,6 +24,47 @@ Lab3/
         └── BookDetailScreen.js  # Вікно перегляду / редагування / створення
 ```
 
+## Архітектура
+
+```mermaid
+flowchart LR
+    subgraph Client["📱 React Native + Expo"]
+        L[BooksListScreen]
+        D[BookDetailScreen]
+        A[api.js]
+        L -->|navigate| D
+        L --> A
+        D --> A
+    end
+
+    subgraph Server["🐍 Python · FastAPI"]
+        M[main.py<br/>endpoints]
+        R[BookRepository<br/>DAO]
+        DB[(SQLite<br/>library.db)]
+        M --> R --> DB
+    end
+
+    A -->|HTTP / JSON| M
+```
+
+## ER-діаграма
+
+```mermaid
+erDiagram
+    BOOK {
+        INTEGER id PK "auto increment"
+        TEXT    title       "NOT NULL"
+        TEXT    author      "NOT NULL"
+        TEXT    isbn        "nullable"
+        INTEGER year        "0..2100, nullable"
+        TEXT    genre       "nullable"
+        INTEGER pages       "1..100000, nullable"
+        INTEGER available   "0/1, default 1"
+    }
+```
+
+> Сутність одна (`Book`) — згідно вимог завдання («достатньо створити одну сутність … принаймні 5 атрибутів»). Реалізовано **8 атрибутів**.
+
 ## Сутність `Book`
 
 | Поле | Тип | Примітка |
